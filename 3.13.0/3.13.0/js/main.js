@@ -1,9 +1,8 @@
 /*
  *    main.js
  */
-// import * as d3 from "d3.min.js";
 
-const margin = { top: 20, right: 100, bottom: 10, left: 100 },
+const margin = { top: 10, right: 100, bottom: 20, left: 100 },
   width = 600 - margin.right - margin.left,
   height = 400 - margin.top - margin.bottom;
 
@@ -37,6 +36,8 @@ d3.json("data/revenues.json").then(function(data) {
     }),
     rects = g.selectAll("rect").data(data);
 
+  console.log(rects);
+
   g.append("g")
     .attr("class", "x-axis")
     .attr("transform", "translate(0, " + height + ")")
@@ -45,10 +46,14 @@ d3.json("data/revenues.json").then(function(data) {
     .attr("class", "y-axis")
     .call(yAxis);
 
-  //   data.forEach(d => {});
   rects
     .enter()
     .append("rect")
+    .on("click", (d, i) => {
+        data.splice(i, 1);
+        rects.data(data);
+        console.log(rects.exit());
+    })
     .attr("x", d => {
       return x(d.month);
     })
@@ -60,4 +65,5 @@ d3.json("data/revenues.json").then(function(data) {
     })
     .attr("width", x.bandwidth)
     .attr("fill", "grey");
+
 });
